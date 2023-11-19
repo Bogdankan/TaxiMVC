@@ -1,0 +1,95 @@
+﻿@using TaxiMVC.Models.Driver
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model DriverIndexVM
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Drivers list</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-controller="Drivers" asp-action="Index" method="get">
+    <div>
+        <label>First name: </label>
+        <input name="FirstName" asp-for="Driver.FirstName" />
+
+        <label>Last name: </label>
+        <input name="LastName" asp-for="Driver.LastName" />
+
+        <label>Phone number: </label>
+        <input name="PhoneNumber" asp-for="Driver.PhoneNumber" />
+
+        @Html.Hidden("page", Model.PageVM.PageNumber)
+
+        <input type="submit" value="Фильтр" />
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index"
+                    asp-route-firstName="@Model.FilterDriverVM.FirstName"
+                    asp-route-lastName="@Model.FilterDriverVM.LastName"
+                    asp-route-phoneNumber="@Model.FilterDriverVM.PhoneNumber"
+                    asp-route-page="@Model.PageVM.PageNumber"
+                    asp-route-sortOrder="@ViewBag.FirstNameSort">
+                @Html.DisplayNameFor(model => model.Driver.FirstName)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-firstName="@Model.FilterDriverVM.FirstName"
+                   asp-route-lastName="@Model.FilterDriverVM.LastName"
+                   asp-route-phoneNumber="@Model.FilterDriverVM.PhoneNumber"
+                   asp-route-page="@Model.PageVM.PageNumber"
+                   asp-route-sortOrder="@ViewBag.SecondNameSort">
+                @Html.DisplayNameFor(model => model.Driver.LastName)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Driver.PhoneNumber)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Drivers) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<p>
+    @if (Model.PageVM.HasPreviousPage)
+    {
+        <a asp-action="Index"
+       asp-route-page="@(Model.PageVM.PageNumber - 1)" class="glyphicon glyphicon-chevron-left">
+            Prev
+        </a>
+    }
+    @if (Model.PageVM.HasNextPage)
+    {
+        <a asp-action="Index"
+       asp-route-page="@(Model.PageVM.PageNumber + 1)" class="glyphicon glyphicon-chevron-right">
+            Next
+        </a>
+    }
+</p>

@@ -1,0 +1,98 @@
+﻿@using TaxiMVC.Models.Car
+@model CarIndexVM
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .glyphicon {
+        display: inline-block;
+        padding: 0 5px;
+    }
+
+    .glyphicon-chevron-right:after {
+        content: "\00BB";
+    }
+
+    .glyphicon-chevron-left:before {
+        content: "\00AB";
+    }
+</style>
+
+<h1>Cars list</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-controller="Cars" asp-action="Index" method="get">
+    <div>
+        <label>Car class: </label>
+        <input name="CarClass" asp-for="FilterCarVM.Class" />
+
+        <label>Drivers: </label>
+        <select name="Driver" asp-items="Model.FilterCarVM.Drivers"></select>
+        @Html.Hidden("page", Model.PageVM.PageNumber)
+        <input type="submit" value="Filter" />
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>        	
+                <a asp-action="Index"
+                   asp-route-carClass="@Model.FilterCarVM.Class"
+                   asp-route-driver="@Model.FilterCarVM.DriverId"
+                   asp-route-sortOrder="@ViewBag.ClassSort"
+                   asp-route-page="@Model.PageVM.PageNumber">                   
+                @Html.DisplayNameFor(model => model.Car.Class)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-carClass="@Model.FilterCarVM.Class"
+                   asp-route-driver="@Model.FilterCarVM.DriverId"
+                   asp-route-sortOrder="@ViewBag.DriverSort"
+                   asp-route-page="@Model.PageVM.PageNumber">
+                @Html.DisplayNameFor(model => model.Car.Driver)
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Cars) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Class)
+            </td>
+                <td>
+                    <a asp-controller="Drivers" asp-action="Details" asp-route-Id=@item.Driver.Id>
+                    @Html.DisplayFor(modelItem => item.Driver.FirstName)
+                    </a>
+                </td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<p>
+    @if (Model.PageVM.HasPreviousPage)
+    {
+        <a asp-action="Index"
+       asp-route-page="@(Model.PageVM.PageNumber - 1)" class="glyphicon glyphicon-chevron-left">
+            Prev
+        </a>
+    }
+    @if (Model.PageVM.HasNextPage)
+    {
+        <a asp-action="Index"
+       asp-route-page="@(Model.PageVM.PageNumber + 1)" class="glyphicon glyphicon-chevron-right">
+            Next
+        </a>
+    }
+</p>

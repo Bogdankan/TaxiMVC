@@ -1,0 +1,143 @@
+﻿@using TaxiMVC.Models.Order
+@model OrderIndexVM
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .glyphicon {
+        display: inline-block;
+        padding: 0 5px;
+    }
+
+    .glyphicon-chevron-right:after {
+        content: "\00BB";
+    }
+
+    .glyphicon-chevron-left:before {
+        content: "\00AB";
+    }
+</style>
+
+<h1>Orders list</h1>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-controller="Orders" asp-action="Index" method="get">
+    <div>
+        <label>Trip begin: </label>
+        <input name="TripBegin" asp-for="TripBegin" />
+
+        <label>Trip end: </label>
+        <input name="TripEnd" asp-for="TripEnd" />
+
+        <label>Cars: </label>
+        <select name="Car" asp-items="Model.FilterOrderVM.Cars"></select>
+
+        @Html.Hidden("page", Model.PageVM.PageNumber)
+
+        <input type="submit" value="Filter" />
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index"
+                    asp-route-tripBegin="@Model.FilterOrderVM.TripBegin"
+                    asp-route-tripEnd="@Model.FilterOrderVM.TripEnd"
+                    asp-route-car="@Model.FilterOrderVM.CarId"
+                    asp-route-page="@Model.PageVM.PageNumber"
+                    asp-route-sortOrder="@ViewBag.PriceSort">
+                @Html.DisplayNameFor(model => model.Price)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-tripBegin="@Model.FilterOrderVM.TripBegin"
+                   asp-route-tripEnd="@Model.FilterOrderVM.TripEnd"
+                   asp-route-car="@Model.FilterOrderVM.CarId"
+                   asp-route-page="@Model.PageVM.PageNumber"
+                   asp-route-sortOrder="@ViewBag.TripBeginSort">
+                @Html.DisplayNameFor(model => model.TripBegin)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-tripBegin="@Model.FilterOrderVM.TripBegin"
+                   asp-route-tripEnd="@Model.FilterOrderVM.TripEnd"
+                   asp-route-car="@Model.FilterOrderVM.CarId"
+                   asp-route-page="@Model.PageVM.PageNumber"
+                   asp-route-sortOrder="@ViewBag.TripEndSort">
+                @Html.DisplayNameFor(model => model.TripEnd)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-tripBegin="@Model.FilterOrderVM.TripBegin"
+                   asp-route-tripEnd="@Model.FilterOrderVM.TripEnd"
+                   asp-route-car="@Model.FilterOrderVM.CarId"
+                   asp-route-page="@Model.PageVM.PageNumber"
+                   asp-route-sortOrder="@ViewBag.OrderDateTimeSort">
+                @Html.DisplayNameFor(model => model.OrderDateTime)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-tripBegin="@Model.FilterOrderVM.TripBegin"
+                   asp-route-tripEnd="@Model.FilterOrderVM.TripEnd"
+                   asp-route-car="@Model.FilterOrderVM.CarId"
+                   asp-route-page="@Model.PageVM.PageNumber"
+                   asp-route-sortOrder="@ViewBag.CarSort">
+                @Html.DisplayNameFor(model => model.Car)
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Orders) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TripBegin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TripEnd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDateTime)
+            </td>
+            <td>
+                <a asp-controller="Cars" asp-action="Details" asp-route-Id=@item.Car.Id>
+                    @Html.DisplayFor(modelItem => item.Car.Class)
+                </a>
+                
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<p>
+    @if (Model.PageVM.HasPreviousPage)
+    {
+        <a asp-action="Index"
+       asp-route-page="@(Model.PageVM.PageNumber - 1)" class="glyphicon glyphicon-chevron-left">
+            Prev
+        </a>
+    }
+    @if (Model.PageVM.HasNextPage)
+    {
+        <a asp-action="Index"
+       asp-route-page="@(Model.PageVM.PageNumber + 1)" class="glyphicon glyphicon-chevron-right">
+            Next
+        </a>
+    }
+</p>
