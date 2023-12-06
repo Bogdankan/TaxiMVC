@@ -10,6 +10,7 @@ namespace TaxiMVC.Models.Car
     public class Car
     {
         public int Id { get; set; }
+        [Required]
         public string? Class { get; set; }
         public int DriverId { get; set; }
         public TaxiMVC.Models.Driver.Driver? Driver { get; set; }

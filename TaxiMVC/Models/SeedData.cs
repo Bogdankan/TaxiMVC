@@ -6,6 +6,7 @@ using System.Linq;
 using TaxiMVC.Models;
 using TaxiMVC.Models.Driver;
 using System.Net.NetworkInformation;
+using TaxiMVC.Areas.Identity.Data;
 
 namespace MvcMovie.Models;
 
@@ -83,6 +84,6 @@ public static class SeedData
             }
         );
             context.SaveChanges();
-        }
+        }       
     }
 }

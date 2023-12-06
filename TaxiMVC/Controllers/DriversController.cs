@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,6 +16,7 @@ using static NuGet.Packaging.PackagingConstants;
 
 namespace TaxiMVC.Controllers
 {
+    //[Authorize]
     public class DriversController : Controller
     {
         private readonly TaxiContext _context;
@@ -123,6 +125,7 @@ namespace TaxiMVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(driver);
         }
 
